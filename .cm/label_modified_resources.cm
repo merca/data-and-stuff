@@ -16,11 +16,8 @@ automations:
 labels:
   - name: Core
     resources:
-    - src/app
-    branch: r/^core-/
-  - name: mobile
+    - src/stargripcorp.dataplatform.infra.utils
+  - name: Azure
     resources:
-    - src/android
-    - src/ios
-    branch: r/^mobile-/
+    - src/stargripcorp.dataplatform.infra.azure
 
