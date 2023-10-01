@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace stargripcorp.dataplatform.infra.azure.Helpers;
 
-internal class Utils
+internal static class Utils
 {
     public static async Task<string> GetRoleIdByNameAsync(string roleName, string? scope = null)
     {

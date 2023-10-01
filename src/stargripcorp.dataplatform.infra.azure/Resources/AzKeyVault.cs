@@ -57,9 +57,13 @@ internal class AzKeyVault : ComponentResource
             {
                 x.TryGetValue(key, out bool user);
                 if (user)
+                {
                     roleAssignments.Add(ForUser(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Reader"));
+                }
                 else
+                {
                     roleAssignments.Add(ForSp(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Reader"));
+                }
             }
             return roleAssignments;
         });
