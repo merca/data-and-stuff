@@ -1,116 +1,90 @@
-# Data and stuff
+# Data and Stuff
 
 <p align="center">
-  <a href="" rel="noopener">
+  <a href="https://github.com/merca/data-and-stuff" rel="noopener">
  <img width=200px height=200px src="https://i.imgur.com/6wj0hh6.jpg" alt="Project logo"></a>
 </p>
 
-<h3 align="center">Project Title</h3>
+<h3 align="center">The Chronicles of a Data Potato</h3>
 
 <div align="center">
 
-  <!-- [![Status](https://img.shields.io/badge/status-active-success.svg)] -->
-  [![GitHub Issues](https://img.shields.io/github/issues/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/issues)
-  [![GitHub Pull Requests](https://img.shields.io/github/issues-pr/kylelobo/The-Documentation-Compendium.svg)](https://github.com/kylelobo/The-Documentation-Compendium/pulls)
-  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+![GitHub issues](https://img.shields.io/github/issues/merca/data-and-stuff)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/merca/data-and-stuff)
 
 </div>
 
----
-
-<p align="center"> Few lines describing your project.
+<p align="center"> A saga of venturing through the trenches of timestamps, and grappling with the tendrils of time in data engineering.
     <br>
 </p>
 
-## 📝 Table of Contents
+📝 Table of Contents
 
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Deployment](#deployment)
-- [Usage](#usage)
-- [Built Using](#built_using)
-- [TODO](../TODO.md)
-- [Contributing](../CONTRIBUTING.md)
-- [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
+- [Data and Stuff](#data-and-stuff)
+  - [🧐 About](#-about)
+  - [🏁 Getting Started](#-getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installing](#installing)
+  - [🔧 Running the tests](#-running-the-tests)
+  - [🎈 Usage](#-usage)
+  - [🚀 Deployment](#-deployment)
+  - [⛏️ Built Using](#️-built-using)
+  - [✍️ Authors](#️-authors)
+  - [🎉 Acknowledgements](#-acknowledgements)
 
-## 🧐 About <a name = "about"></a>
+## 🧐 About
 
-This repo will contain all code for the disoveris I make while exploring the realm of data engineering, architecture, analysis and sience.
+In this repository, you'll find the relics of my expeditions into the uncharted territories of data engineering, architecture, analysis, and science. The `feature/add-timestamps-handeling` branch is but one of the many scrolls of knowledge housed within.
 
-## 🏁 Getting Started <a name = "getting_started"></a>
+## 🏁 Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+To embark upon this quest, ensure your steed (your machine) is equipped with the necessary armaments.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them.
-
 ```sh
-Give examples
+# Install necessary tools
+
+brew install python
+brew install pulumi
 ```
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running.
-
-Say what the step will be
+Clone the repository to have the map of this digital realm.
 
 ```sh
-Give the example
+git clone https://github.com/merca/data-and-stuff.git
+cd data-and-stuff
 ```
 
-And repeat
+## 🔧 Running the tests
+
+Invoke the spells to summon the testing spirits.
 
 ```sh
-until finished
+# Run the tests
+pytest
 ```
 
-End with an example of getting some data out of the system or using it for a little demo.
+## 🎈 Usage
 
-## 🔧 Running the tests <a name = "tests"></a>
+With the repository cloned and your machine prepared, you may now delve into the scripts and notebooks, each a tome of data incantations.
 
-Explain how to run the automated tests for this system.
+## 🚀 Deployment
 
-### Break down into end to end tests
+Deploying your findings to the live system is akin to placing the flag upon the conquered fortress.
 
-Explain what these tests test and why
+## ⛏️ Built Using
 
-```sh
-Give an example
-```
+- [Pulumi](https://www.pulumi.com/) - The sorcery of Infrastructure as Code
 
-### And coding style tests
+## ✍️ Authors
 
-Explain what these tests test and why
+- [@merca](https://github.com/merca) - The Supreme Commander of Data
 
-```sh
-Give an example
-```
+## 🎉 Acknowledgements
 
-## 🎈 Usage <a name="usage"></a>
-
-Add notes about how to use the system.
-
-## 🚀 Deployment <a name = "deployment"></a>
-
-Add additional notes about how to deploy this on a live system.
-
-## ⛏️ Built Using <a name = "built_using"></a>
-
-- [MongoDB](https://www.mongodb.com/) - Database
-- [Express](https://expressjs.com/) - Server Framework
-- [VueJs](https://vuejs.org/) - Web Framework
-- [NodeJs](https://nodejs.org/en/) - Server Environment
-
-## ✍️ Authors <a name = "authors"></a>
-
-- [@kylelobo](https://github.com/kylelobo) - Idea & Initial work
-
-See also the list of [contributors](https://github.com/kylelobo/The-Documentation-Compendium/contributors) who participated in this project.
-
-## 🎉 Acknowledgements <a name = "acknowledgement"></a>
-
-- Hat tip to anyone whose code was used
-- Inspiration
-- References
+- Gratitude to the digital sorcerers and code wizards whose ingenious creations aided in this quest.
+- A nod to the insatiable curiosity that fuels this exploration.
+- May the bytes be ever in your favor.
