@@ -18,26 +18,25 @@
     <br>
 </p>
 
-## 📝 Table of Contents
+📝 Table of Contents
 
 - [Data and Stuff](#data-and-stuff)
-  - [📝 Table of Contents](#-table-of-contents)
-  - [🧐 About ](#-about-)
-  - [🏁 Getting Started ](#-getting-started-)
+  - [🧐 About](#-about)
+  - [🏁 Getting Started](#-getting-started)
     - [Prerequisites](#prerequisites)
     - [Installing](#installing)
-  - [🔧 Running the tests ](#-running-the-tests-)
-  - [🎈 Usage ](#-usage-)
-  - [🚀 Deployment ](#-deployment-)
-  - [⛏️ Built Using ](#️-built-using-)
-  - [✍️ Authors ](#️-authors-)
-  - [🎉 Acknowledgements ](#-acknowledgements-)
+  - [🔧 Running the tests](#-running-the-tests)
+  - [🎈 Usage](#-usage)
+  - [🚀 Deployment](#-deployment)
+  - [⛏️ Built Using](#️-built-using)
+  - [✍️ Authors](#️-authors)
+  - [🎉 Acknowledgements](#-acknowledgements)
 
-## 🧐 About <a name = "about"></a>
+## 🧐 About
 
 In this repository, you'll find the relics of my expeditions into the uncharted territories of data engineering, architecture, analysis, and science. The `feature/add-timestamps-handeling` branch is but one of the many scrolls of knowledge housed within.
 
-## 🏁 Getting Started <a name = "getting_started"></a>
+## 🏁 Getting Started
 
 To embark upon this quest, ensure your steed (your machine) is equipped with the necessary armaments.
 
@@ -59,7 +58,7 @@ git clone https://github.com/merca/data-and-stuff.git
 cd data-and-stuff
 ```
 
-## 🔧 Running the tests <a name = "tests"></a>
+## 🔧 Running the tests
 
 Invoke the spells to summon the testing spirits.
 
@@ -68,23 +67,23 @@ Invoke the spells to summon the testing spirits.
 pytest
 ```
 
-## 🎈 Usage <a name="usage"></a>
+## 🎈 Usage
 
 With the repository cloned and your machine prepared, you may now delve into the scripts and notebooks, each a tome of data incantations.
 
-## 🚀 Deployment <a name = "deployment"></a>
+## 🚀 Deployment
 
 Deploying your findings to the live system is akin to placing the flag upon the conquered fortress.
 
-## ⛏️ Built Using <a name = "built_using"></a>
+## ⛏️ Built Using
 
 - [Pulumi](https://www.pulumi.com/) - The sorcery of Infrastructure as Code
 
-## ✍️ Authors <a name = "authors"></a>
+## ✍️ Authors
 
 - [@merca](https://github.com/merca) - The Supreme Commander of Data
 
-## 🎉 Acknowledgements <a name = "acknowledgement"></a>
+## 🎉 Acknowledgements
 
 - Gratitude to the digital sorcerers and code wizards whose ingenious creations aided in this quest.
 - A nod to the insatiable curiosity that fuels this exploration.
