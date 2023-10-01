@@ -23,7 +23,7 @@ jobs:
             - name: Run dotnet tests
               run: |
                 # Run your tests here
-                dotnet test ./infra --collect:"XPlat Code Coverage" --logger:"trx;LogFilePrefix=testResults;verbosity=detailed" --results-directory ./test-results
+                dotnet test ./src --collect:"XPlat Code Coverage" --logger:"trx;LogFilePrefix=testResults;verbosity=detailed" --results-directory ./test-results
                 mv -v ./test-results/*/*.* ./test-results/
             - name: Publish Test Results
               uses: EnricoMi/publish-unit-test-result-action/composite@v2
