@@ -7,15 +7,11 @@ public class NamingConventionTests
 {
     private readonly NamingConvention azNamingConvention;
     private readonly NamingConvention azLongNamingConvention;
-    private readonly NamingConvention? awsNamingConvention;
-    private readonly NamingConvention? gcpNamingConvention;
 
     public NamingConventionTests()
     {
         azNamingConvention = new NamingConvention("myco", "myapp", "dev", "azure");
         azLongNamingConvention = new NamingConvention("myco", "myappwithaverylongname", "dev", "azure");
-        //awsNamingConvention = new NamingConvention("myco", "myapp", "dev", "aws");
-        //gcpNamingConvention = new NamingConvention("myco", "myapp", "dev", "gcp");
     }
     [Fact]
     public void GetResourceName_StorageAccount_ReturnsCorrectName()
@@ -90,7 +86,7 @@ public class NamingConventionTests
     }
 
     [Fact]
-    public void GetRecourceId_StorageAccount_ReturnsCorrectId()
+    public void GetRecourseId_StorageAccount_ReturnsCorrectId()
     {
         // Arrange
         var resourceType = "azure-native:storage:StorageAccount";
@@ -101,16 +97,4 @@ public class NamingConventionTests
         // Assert
         resourceIdx.Should().Be("myco-myapp-dev-sa");
     }
-
-    //[Fact]
-    //public void GetResourceName_AwsBucket_UsesCorrectNamingConvention()
-    //{
-    //    // Arrange
-
-    //    // Act
-    //    var resourceName = awsNamingConvention.GetResourceName("aws:s3:Bucket");
-
-    //    // Assert
-    //    resourceName.Should().Be("myco-myapp-dev-s3", because: "the resource name should follow the correct naming convention");
-    //}
 }

@@ -8,7 +8,7 @@ namespace stargripcorp.dataplatform.infra.azure.Resources;
 
 internal class AzKeyVault : ComponentResource
 {
-    private static Output<GetClientConfigResult> _clientConfig => GetClientConfig.Invoke();
+    private static Output<GetClientConfigResult> ClientConfig => GetClientConfig.Invoke();
     private readonly NamingConvention _naming;
     protected Azure.KeyVault.Vault Vault;
     private readonly Output<string> _resourceGroupName;
@@ -23,7 +23,7 @@ internal class AzKeyVault : ComponentResource
             Tags = _tags,
             Properties = new Azure.KeyVault.Inputs.VaultPropertiesArgs
             {
-                TenantId = _clientConfig.Apply(o => o.TenantId),
+                TenantId = ClientConfig.Apply(o => o.TenantId),
                 Sku = new Azure.KeyVault.Inputs.SkuArgs
                 {
                     Name = Azure.KeyVault.SkuName.Standard,
@@ -35,7 +35,7 @@ internal class AzKeyVault : ComponentResource
     }
     public AzKeyVault WithSecret(string secretName, string secretValue)
     {
-        var secret = new Azure.KeyVault.Secret(_naming.GetResourceId("azure-native:keyvault:Secret"), new()
+        _ = new Azure.KeyVault.Secret(_naming.GetResourceId("azure-native:keyvault:Secret"), new()
         {
             VaultName = Vault.Name,
             ResourceGroupName = _resourceGroupName,
@@ -52,7 +52,7 @@ internal class AzKeyVault : ComponentResource
     {
         object value = readers.Apply(x =>
         {
-            List<RoleAssignment> roleAssignments = new();
+            List<RoleAssignment> roleAssignments = [];
             foreach (var key in x.Keys)
             {
                 x.TryGetValue(key, out bool user);
@@ -74,7 +74,7 @@ internal class AzKeyVault : ComponentResource
     {
         object value = contributors.Apply(x =>
         {
-            List<RoleAssignment> roleAssignments = new();
+            List<RoleAssignment> roleAssignments = [];
             foreach(var key in x.Keys)
             {
                 x.TryGetValue(key, out bool user);

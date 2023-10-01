@@ -9,7 +9,7 @@ internal class AzResourceGroup : ComponentResource
 {
     protected Azure.Resources.ResourceGroup ResourceGroup;
     public Output<string> ResourceGroupName;
-    private static Output<GetClientConfigResult> _clientConfig => GetClientConfig.Invoke();
+    private static Output<GetClientConfigResult> ClientConfig => GetClientConfig.Invoke();
     private readonly NamingConvention _naming;
 
     public AzResourceGroup(string id, NamingConvention naming, Dictionary<string, string> _tags) : base("pkg:azure:resource_group", id)
@@ -24,7 +24,7 @@ internal class AzResourceGroup : ComponentResource
     }
     public AzResourceGroup WithBudget(double budgetAmount, string[] notificationEmails)
     {
-        Output<string> subscriptionId = _clientConfig.Apply(o => o.SubscriptionId);
+        Output<string> subscriptionId = ClientConfig.Apply(o => o.SubscriptionId);
 
         var budget = new Azure.Consumption.Budget(_naming.GetResourceId("azure-native:resources:Budget"), new()
         {
@@ -46,7 +46,7 @@ internal class AzResourceGroup : ComponentResource
                     Operator = "In",
                     Values = new()
                 {
-                    $"/subscriptions/{_clientConfig.Apply(o=>o.SubscriptionId)}/resourceGroups/{ResourceGroup!.Name}"
+                    $"/subscriptions/{ClientConfig.Apply(o=>o.SubscriptionId)}/resourceGroups/{ResourceGroup!.Name}"
                 }
                 },
 

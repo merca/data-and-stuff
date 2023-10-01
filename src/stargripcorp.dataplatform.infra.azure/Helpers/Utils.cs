@@ -6,7 +6,7 @@ namespace stargripcorp.dataplatform.infra.azure.Helpers;
 
 internal static class Utils
 {
-    public static async Task<string> GetRoleIdByNameAsync(string roleName, string? scope = null)
+    public static async Task<string> GetRoleIdByNameAsync(string roleName)
     {
         var config = await GetClientConfig.InvokeAsync();
         var token = await GetClientToken.InvokeAsync();
@@ -22,8 +22,8 @@ internal static class Utils
         }
         var body = await response.Content.ReadAsStringAsync();
         var definition = JsonSerializer.Deserialize<RoleDefinition>(body);
-        return definition!.value[0].id;
+        return definition!.RoleDefinitionValueList[0].Id;
     }
 }
-public record RoleDefinition(List<RoleDefinitionValue> value);
-public record RoleDefinitionValue(string id, string type, string name);
+public record RoleDefinition(List<RoleDefinitionValue> RoleDefinitionValueList);
+public record RoleDefinitionValue(string Id, string Type, string Name);

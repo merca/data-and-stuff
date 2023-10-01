@@ -4,19 +4,13 @@ using stargripcorp.dataplatform.infra.utils.Stack;
 
 namespace stargripcorp.dataplatform.infra.azure.Infrastructure;
 
-internal class DataPlatform
+internal class DataPlatform(StackConfig config, NamingConvention naming, Dictionary<string, string> tags)
 {
-    private readonly StackConfig _config;
-    private readonly NamingConvention _naming;
+    private readonly StackConfig _config = config;
+    private readonly NamingConvention _naming = naming;
     private readonly string shortName = "data";
-    private readonly Dictionary<string, string> _tags;
+    private readonly Dictionary<string, string> _tags = tags;
 
-    public DataPlatform(StackConfig config, NamingConvention naming, Dictionary<string, string> tags)
-    {
-        _config = config;
-        _naming = naming;
-        _tags = tags;
-    }
     public void Run()
     {
         var rg = new AzResourceGroup($"{shortName}-rg", _naming, _tags).WithBudget(20, ["merca.ovnerud@pulumi.me"]);

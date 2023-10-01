@@ -9,6 +9,7 @@ public partial class NamingConvention
     private readonly string environment;
 
     private readonly ResourceTypeAbbreviations resourceTypeAbbreviations;
+    private static readonly string[] sourceArray = ["dev", "test", "stage", "prod"];
 
     public NamingConvention(string owner, string shortName, string environment, string cloudProvider)
     {
@@ -17,7 +18,7 @@ public partial class NamingConvention
             throw new ArgumentException("Owner name must be 5 characters or less.");
         }
 
-        if (!new[] { "dev", "test", "stage", "prod" }.Contains(environment))
+        if (!sourceArray.Contains(environment))
         {
             throw new ArgumentException("Environment must be one of: dev, test, stage, prod.");
         }
@@ -26,20 +27,11 @@ public partial class NamingConvention
         this.shortName = shortName;
         this.environment = environment;
 
-        switch (cloudProvider)
+        resourceTypeAbbreviations = cloudProvider switch
         {
-            case "azure":
-                resourceTypeAbbreviations = new AzureResourceTypeAbbreviations();
-                break;
-            //case "aws":
-            //    resourceTypeAbbreviations = new AwsResourceTypeAbbreviations();
-            //    break;
-            //case "gcp":
-            //    resourceTypeAbbreviations = new GcpeResourceTypeAbbreviations();
-            //    break;
-            default:
-                throw new ArgumentException($"Unknown cloud provider: {cloudProvider}");
-        }
+            "azure" => new AzureResourceTypeAbbreviations(),
+            _ => throw new ArgumentException($"Unknown cloud provider: {cloudProvider}"),
+        };
     }
 
     public string GetResourceId(string resourceType)
@@ -63,15 +55,12 @@ public partial class NamingConvention
 
         var resourceTypeAbbreviation = resourceTypeAbbreviations.GetAbbreviation(resourceType);
 
-        switch (resourceType)
+        return resourceType switch
         {
-            case "azure-native:storage:StorageAccount":
-                return GetStorageAccountResourceName(resourceTypeAbbreviation);
-            case "azure-native:keyvault:Vault":
-                return GetKeyVaultResourceName(resourceTypeAbbreviation);
-            default:
-                return GetDefaultResourceName(resourceTypeAbbreviation);
-        }
+            "azure-native:storage:StorageAccount" => GetStorageAccountResourceName(resourceTypeAbbreviation),
+            "azure-native:keyvault:Vault" => GetKeyVaultResourceName(resourceTypeAbbreviation),
+            _ => GetDefaultResourceName(resourceTypeAbbreviation),
+        };
     }
 
     private string GetStorageAccountResourceName(string resourceTypeAbbreviation)

@@ -6,18 +6,13 @@ using stargripcorp.dataplatform.infra.utils.Stack;
 
 namespace stargripcorp.dataplatform.infra.azure.Infrastructure;
 
-internal class CoreComponents
+internal class CoreComponents(StackConfig config, NamingConvention naming, Dictionary<string, string> tags)
 {
-    private readonly StackConfig _config;
-    private readonly NamingConvention _naming;
+    private readonly StackConfig _config = config;
+    private readonly NamingConvention _naming = naming;
     private readonly string shortName = "core";
-    private readonly Dictionary<string, string> _tags;
-    public CoreComponents(StackConfig config, NamingConvention naming, Dictionary<string, string> tags)
-    {
-        _config = config;
-        _naming = naming;
-        _tags = tags;
-    }
+    private readonly Dictionary<string, string> _tags = tags;
+
     public void Run()
     {
         var rg = new AzResourceGroup($"{shortName}-rg", _naming, _tags).WithBudget(20, ["merca@cetera.desunt.com"]);
@@ -29,7 +24,7 @@ internal class CoreComponents
         {"3a668e53-336b-4d30-94bf-6620cdd036ec", true } //me
     };
 
-        var kv = new AzKeyVault($"{shortName}-kv", _naming, rg.ResourceGroupName, _tags)
+        _ = new AzKeyVault($"{shortName}-kv", _naming, rg.ResourceGroupName, _tags)
             .WithKeyVaultSecretsAdmins(Output.Create(admins)).WithSecret("test", "test");
     }
 }
