@@ -60,18 +60,43 @@ namespace stargripcorp.dataplatform.infra.azure.Resources
             }
             return this;
         }
-        public AzKeyVault WithSecretsContributor(List<Output<string>> contributorIds)
+        public AzKeyVault WithKeyVaultSecretsAdmins(Output<Dictionary<string,bool>> contributors)
         {
-            foreach (var contributorId in contributorIds)
+            object value = contributors.Apply(x =>
             {
-                var contributor = new RoleAssignment(_naming.GetResourceId("azure-native:authorization:RoleAssignment"), new()
+                List<RoleAssignment> roleAssignments = new();
+                foreach(var key in x.Keys)
                 {
-                    PrincipalId = contributorId,
-                    RoleDefinitionId = Utils.GetRoleIdByName("Key Vault Secrets Officer").Result,
-                    Scope = Vault.Id
-                }, new CustomResourceOptions { Parent = this });
-            }
+                    x.TryGetValue(key, out bool user);
+                    if (user)
+                        roleAssignments.Add( ForUser(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}"));
+                    else
+                        roleAssignments.Add( ForSp(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}"));
+                }
+                return roleAssignments;
+            });
+            
             return this;
+        }
+        private RoleAssignment ForUser(string objectId,string name)
+        {
+            return new RoleAssignment(name, new()
+            {
+                PrincipalId = objectId,
+                RoleDefinitionId = Utils.GetRoleIdByName("Key Vault Secrets Officer").Result,
+                PrincipalType = "User",
+                Scope = Vault.Id
+            }, new CustomResourceOptions { Parent = this });
+        }
+        private RoleAssignment ForSp(string objectId, string name)
+        {
+            return new RoleAssignment(name, new()
+            {
+                PrincipalId = objectId,
+                RoleDefinitionId = Utils.GetRoleIdByName("Key Vault Secrets Officer").Result,
+                PrincipalType = "ServicePrincipal",
+                Scope = Vault.Id
+            }, new CustomResourceOptions { Parent = this });
         }
     }
 }

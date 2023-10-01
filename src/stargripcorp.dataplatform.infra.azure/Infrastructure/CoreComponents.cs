@@ -18,9 +18,14 @@ internal class CoreComponents
     {
         var rg = new AzResourceGroup($"{shortName}-rg", _naming).WithBudget(20, ["merca@cetera.desunt.com"]);
         var currentServicePrincipalId = Output.Create(GetClientConfig.InvokeAsync()).Apply(c => c.ObjectId);
+
+        var admins = new Dictionary<string, bool>
+        {
+            {"b2c1cc8f-38db-4838-8f59-4a4b5393848c", false}, //deploy-sp
+            {"3a668e53-336b-4d30-94bf-6620cdd036ec", true } //me
+        };
+
         var kv = new AzKeyVault($"{shortName}-kv", _naming, rg.ResourceGroupName)
-            .WithSecretsContributor(new List<Output<string>> {
-                currentServicePrincipalId,
-            }).WithSecret("test", "test");
+            .WithKeyVaultSecretsAdmins(Output.Create(admins)).WithSecret("test", "test");
     }
 }
