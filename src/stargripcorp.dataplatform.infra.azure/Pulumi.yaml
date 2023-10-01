@@ -1,0 +1,3 @@
+name: stargripcorp
+description: A dataplatform infrastructure for stargripcorp
+runtime: dotnet
