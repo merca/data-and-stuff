@@ -46,6 +46,7 @@ internal class AzResourceGroup : ComponentResource
                         $"/subscriptions/{_clientConfig.Apply(o=>o.SubscriptionId)}/resourceGroups/{ResourceGroup!.Name}"
                     }
                 },                
+
             },
             Notifications =
             {
