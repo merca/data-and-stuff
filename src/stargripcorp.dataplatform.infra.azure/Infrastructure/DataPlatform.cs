@@ -17,7 +17,7 @@ internal class DataPlatform
     }
     public void Run()
     {
-        var rg = new AzResourceGroup(shortName, _naming).WithBudget(20, ["merca.ovnerud@pulumi.me"]);
-        var storage = new AzStorage(shortName, _naming, rg.ResourceGroupName).AsDataLake();
+        var rg = new AzResourceGroup($"{shortName}-rg", _naming).WithBudget(20, ["merca.ovnerud@pulumi.me"]);
+        var storage = new AzStorage($"{shortName}-sa", _naming, rg.ResourceGroupName).AsDataLake();
     }
 }

@@ -22,35 +22,30 @@ internal class AzResourceGroup : ComponentResource
     public AzResourceGroup WithBudget(double budgetAmount, string[] notificationEmails)
     {
         Output<string> subscriptionId = _clientConfig.Apply(o => o.SubscriptionId);
+
         var budget = new Azure.Consumption.Budget(_naming.GetResourceId("azure-native:resources:Budget"), new()
         {
             Amount = budgetAmount,
             Category = "Cost",
             TimeGrain = "Monthly",
-            Scope = $"/subscriptions/{subscriptionId}",
+            Scope = Output.Format($"/subscriptions/{subscriptionId}"),
             TimePeriod = new Azure.Consumption.Inputs.BudgetTimePeriodArgs
             {
-                StartDate = "2023-01-01T00:00:00+00:00",
+                StartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("yyyy-MM-ddTHH:mm:ss+00:00"),
                 EndDate = DateTime.UtcNow.AddYears(1).ToString("yyyy-MM-ddTHH:mm:ss+00:00")
             },
             BudgetName = _naming.GetResourceName("azure-native:resources:Budget"),
             Filter = new Azure.Consumption.Inputs.BudgetFilterArgs
             {
-                And = new[]
+                Dimensions = new Azure.Consumption.Inputs.BudgetComparisonExpressionArgs
                 {
-                    new Azure.Consumption.Inputs.BudgetFilterPropertiesArgs
+                    Name = "ResourceGroupName",
+                    Operator = "In",
+                    Values = new()
                     {
-                        Dimensions = new Azure.Consumption.Inputs.BudgetComparisonExpressionArgs
-                        {
-                            Name = "ResourceId",
-                            Operator = "In",
-                            Values = new string[] 
-                            {
-                                $"/subscriptions/{_clientConfig.Apply(o=>o.SubscriptionId)}/resourceGroups/{ResourceGroup!.Name}"
-                            }
-                        }
+                        $"/subscriptions/{_clientConfig.Apply(o=>o.SubscriptionId)}/resourceGroups/{ResourceGroup!.Name}"
                     }
-                }
+                },                
             },
             Notifications =
             {
