@@ -22,6 +22,28 @@ automations:
       - action: explain-code-experts@v1 
         args:
           gt: 10 
+  welcome_newcomer:
+    # If the PR author made their first contirbution on the current day
+    if:
+      - {{ repo.author_age < 1 and repo.age > 0 }}
+    # 1. Add reviewers from the team `my_organization/mentors`. Replace this string to match your organization
+    # 2. Apply a new-contributor label.
+    # 3 Post a comment that explains the next steps.
+    run:
+      - action: add-reviewers@v1
+        args:
+          reviewers: [my_organization/mentors]
+      - action: add-label@v1
+        args:
+          label: 'new-contributor'
+          color: '#FBBD10'
+      - action : add-comment@v1
+        args:
+          comment: |
+            Hello {{ pr.author }} 👋 Thanks for making your first PR, and welcome to our project!
+            Our mentor team has automatically been assigned to review this PR and guide you through the process.
+            Please reach out to that team if you have questions about the next steps.
 # The next function calculates the estimated time to review and makes it available in the automation above.
 calc:
   etr: {{ branch | estimatedReviewTime }}
+
