@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace stargripcorp.dataplatform.infra.utils.Naming;
+﻿namespace stargripcorp.dataplatform.infra.utils.Naming;
 
 public class NamingConvention
 {
@@ -21,8 +19,12 @@ public class NamingConvention
 
         resourceTypeGenerators = new Dictionary<string, Func<string, string>>
         {
-            { "azure-native:storage:StorageAccount", GenerateStorageAccountResourceName },
-            { "azure-native:keyvault:Vault", GenerateKeyVaultResourceName }
+            {"azure-native:storage:StorageAccount", GenerateStorageAccountResourceName },
+            { "azure-native:keyvault:Vault", GenerateKeyVaultResourceName },
+            {"azure-native:resources:ResourceGroup",GenerateResourceName},
+            {"azure-native:authorization:RoleAssignment",GenerateResourceName},
+            {"azure-native:resources:Budget",GenerateResourceName},
+            {"azure-native:keyvault:Secret",GenerateResourceName},
         };
     }
 
@@ -37,6 +39,17 @@ public class NamingConvention
     }
 
     public string GenerateResourceId(string resourceType)
+    {
+        if (!resourceTypeGenerators.ContainsKey(resourceType))
+        {
+            throw new ArgumentException($"Unknown resource type: {resourceType}");
+        }
+
+        var resourceTypeAbbreviation = resourceTypeAbbreviations.GetAbbreviation(resourceType);
+        var resourceName = $"{owner}-{shortName}-{environment}-{resourceTypeAbbreviation}";
+        return $"{resourceName}";
+    }
+    public string GenerateResourceName(string resourceType)
     {
         if (!resourceTypeGenerators.ContainsKey(resourceType))
         {
