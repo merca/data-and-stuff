@@ -50,7 +50,7 @@ internal class AzKeyVault : ComponentResource
     }
     public AzKeyVault WithSecretsReader(Output<Dictionary<string, bool>> readers)
     {
-        object value = readers.Apply(x =>
+        _ = readers.Apply(x =>
         {
             List<RoleAssignment> roleAssignments = [];
             foreach (var key in x.Keys)
@@ -72,7 +72,7 @@ internal class AzKeyVault : ComponentResource
     }
     public AzKeyVault WithKeyVaultSecretsAdmins(Output<Dictionary<string,bool>> contributors)
     {
-        object value = contributors.Apply(x =>
+        _ = contributors.Apply(x =>
         {
             List<RoleAssignment> roleAssignments = [];
             foreach(var key in x.Keys)

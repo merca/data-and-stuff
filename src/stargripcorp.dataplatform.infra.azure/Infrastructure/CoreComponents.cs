@@ -16,7 +16,6 @@ internal class CoreComponents(StackConfig config, NamingConvention naming, Dicti
     public void Run()
     {
         var rg = new AzResourceGroup($"{shortName}-rg", _naming, _tags).WithBudget(20, ["merca@cetera.desunt.com"]);
-        var currentServicePrincipalId = Output.Create(GetClientConfig.InvokeAsync()).Apply(c => c.ObjectId);
 
         var admins = new Dictionary<string, bool>
     {

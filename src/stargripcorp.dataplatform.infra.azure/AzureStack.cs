@@ -20,17 +20,17 @@ internal class AzureStack : Stack
         Readme = Output.Create(File.ReadAllText("../readme.md"));
 
         var tags = new Tags(new Dictionary<string, string>
-    {
-        {"owner", config.Owner},
-        {"environment", config.Environment},
-        {"cloudProvider", CloudProvider},
-        {"stack", "data-platform"},
-        {"project", "stargripcorp"},
-        {"contact", "merca.ovnerud@proton.me"},
-        {"created", DateTime.UtcNow.ToString("yyyy-MM-dd") },
-        {"createdBy", "Pulumi"},
-        {"is_automated", "true" }
-    });
+        {
+            {"owner", config.Owner},
+            {"environment", config.Environment},
+            {"cloudProvider", CloudProvider},
+            {"stack", "data-platform"},
+            {"project", "stargripcorp"},
+            {"contact", "merca.ovnerud@proton.me"},
+            {"created", DateTime.UtcNow.ToString("yyyy-MM-dd") },
+            {"createdBy", "Pulumi"},
+            {"is_automated", "true" }
+        });
 
         new CoreComponents(config,
             new NamingConvention(
@@ -41,11 +41,10 @@ internal class AzureStack : Stack
                 ), tags: tags.Std_Tags).Run();
         new DataPlatform(config,
             new NamingConvention(
-                owner: config.Owner,
-                shortName: "data",
-                environment: config.Environment,
-                cloudProvider: CloudProvider
+                    owner: config.Owner,
+                    shortName: "data",
+                    environment: config.Environment,
+                    cloudProvider: CloudProvider
                 ), tags: tags.Std_Tags).Run();
     }
-
 }

@@ -14,6 +14,6 @@ internal class DataPlatform(StackConfig config, NamingConvention naming, Diction
     public void Run()
     {
         var rg = new AzResourceGroup($"{shortName}-rg", _naming, _tags).WithBudget(20, ["merca.ovnerud@pulumi.me"]);
-        var storage = new AzStorage($"{shortName}-sa", _naming, rg.ResourceGroupName).AsDataLake();
+        _ = new AzStorage($"{shortName}-sa", _naming, rg.ResourceGroupName).AsDataLake();
     }
 }

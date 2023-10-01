@@ -26,7 +26,7 @@ internal class AzResourceGroup : ComponentResource
     {
         Output<string> subscriptionId = ClientConfig.Apply(o => o.SubscriptionId);
 
-        var budget = new Azure.Consumption.Budget(_naming.GetResourceId("azure-native:resources:Budget"), new()
+        _ = new Azure.Consumption.Budget(_naming.GetResourceId("azure-native:resources:Budget"), new()
         {
             Amount = budgetAmount,
             Category = "Cost",
@@ -52,18 +52,17 @@ internal class AzResourceGroup : ComponentResource
 
             },
             Notifications =
-        {
-            { "Actual_GreaterThan_80_Percent", new Azure.Consumption.Inputs.NotificationArgs
             {
-                ContactEmails = notificationEmails,
-                Enabled = true,
-                Locale = "en-us",
-                Operator = "GreaterThan",
-                Threshold = 80,
-                ThresholdType = "Actual",
-            } },
-        },
-
+                { "Actual_GreaterThan_80_Percent", new Azure.Consumption.Inputs.NotificationArgs
+                {
+                    ContactEmails = notificationEmails,
+                    Enabled = true,
+                    Locale = "en-us",
+                    Operator = "GreaterThan",
+                    Threshold = 80,
+                    ThresholdType = "Actual",
+                } },
+            },
         }, new CustomResourceOptions { Parent = this });
         return this;
     }

@@ -64,7 +64,6 @@ public class NamingConventionTests
     [Fact]
     public void GetResourceName_StorageAccount_LongShortName_ReturnsCorrectName()
     {
-
         // Act
         var resourceName = azLongNamingConvention.GetResourceName("azure-native:storage:StorageAccount");
 
@@ -76,7 +75,6 @@ public class NamingConventionTests
     [Fact]
     public void GetResourceName_KeyVault_LongShortName_ReturnsCorrectName()
     {
-
         // Act
         var resourceName = azLongNamingConvention.GetResourceName("azure-native:keyvault:Vault");
 
