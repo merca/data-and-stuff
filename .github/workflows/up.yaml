@@ -1,6 +1,8 @@
 name: Pulumi
 on:
-  pull_request:
+  push:
+    branches:
+      - current
     paths:
       - 'src/**'
 
@@ -10,7 +12,7 @@ permissions:
 
 jobs:
   deployment:    
-    name: Preview
+    name: Pulumi Up
     runs-on: ubuntu-latest
     environment: production
     steps:
