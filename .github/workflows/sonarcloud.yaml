@@ -18,6 +18,9 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: actions/setup-dotnet@v3
+        with:
+            dotnet-version: 8.0.x
       - name: Cache SonarCloud packages
         uses: actions/cache@v3
         with:
@@ -44,5 +47,5 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"merca_data-and-stuff" /o:"merca" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build src/
+          dotnet build src\stargripcorp.dataplatform.infra.sln
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
