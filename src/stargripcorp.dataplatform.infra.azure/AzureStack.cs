@@ -14,7 +14,7 @@ internal class AzureStack:Stack
                        Owner: Config.Require("owner"),
                        Environment: Config.Require("environment"));
 
-        Readme = Output.Create(File.ReadAllText("../README.md"));
+        Readme = Output.Create(File.ReadAllText("../readme.md"));
 
         new CoreComponents(config, 
             new NamingConvention(
