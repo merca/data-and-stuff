@@ -10,7 +10,7 @@ internal class DataPlatform
     private readonly NamingConvention _naming;
     private readonly string shortName = "data";
 
-    public DataPlatform(StackConfig config, NamingConvention naming)
+    public DataPlatform(StackConfig config, NamingConvention naming, Dictionary<string, string> tags)
     {
         _config = config;
         _naming = naming;

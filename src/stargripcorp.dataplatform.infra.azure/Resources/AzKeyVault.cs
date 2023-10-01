@@ -12,7 +12,7 @@ namespace stargripcorp.dataplatform.infra.azure.Resources
         private readonly NamingConvention _naming;
         protected Azure.KeyVault.Vault Vault;
         private Output<string> _resourceGroupName;
-        public AzKeyVault(string id, NamingConvention naming, Output<string> resourceGroupName) : base("pkg:azure:keyvault", id)
+        public AzKeyVault(string id, NamingConvention naming, Output<string> resourceGroupName, Dictionary<string, string> _tags) : base("pkg:azure:keyvault", id)
         {
             _naming = naming;
             _resourceGroupName = resourceGroupName;
@@ -20,6 +20,7 @@ namespace stargripcorp.dataplatform.infra.azure.Resources
             {
                 VaultName = _naming.GetResourceName("azure-native:keyvault:Vault"),
                 ResourceGroupName = resourceGroupName,
+                Tags = _tags,
                 Properties = new Azure.KeyVault.Inputs.VaultPropertiesArgs
                 {
                     TenantId = _clientConfig.Apply(o => o.TenantId),
@@ -28,9 +29,9 @@ namespace stargripcorp.dataplatform.infra.azure.Resources
                         Name = Azure.KeyVault.SkuName.Standard,
                         Family = Azure.KeyVault.SkuFamily.A,
                     },
-                    EnableRbacAuthorization = true,
+                    EnableRbacAuthorization = true,                    
                 }
-            }, new CustomResourceOptions { Parent = this });
+            }, new CustomResourceOptions { Parent = this, IgnoreChanges = new List<string> { "tags.created" } });
         }
         public AzKeyVault WithSecret(string secretName, string secretValue)
         {
@@ -47,17 +48,22 @@ namespace stargripcorp.dataplatform.infra.azure.Resources
 
             return this;
         }
-        public AzKeyVault WithSecretsReader(string[] readerIds)
+        public AzKeyVault WithSecretsReader(Output<Dictionary<string, bool>> readers)
         {
-            foreach (var readerId in readerIds)
+            object value = readers.Apply(x =>
             {
-                var secret = new RoleAssignment(_naming.GetResourceId("azure-native:authorization:RoleAssignment"), new()
+                List<RoleAssignment> roleAssignments = new();
+                foreach (var key in x.Keys)
                 {
-                    PrincipalId = readerId,
-                    RoleDefinitionId = Utils.GetRoleIdByName("Key Vault Reader").Result,
-                    Scope = Vault.Id
-                }, new CustomResourceOptions { Parent = this });
-            }
+                    x.TryGetValue(key, out bool user);
+                    if (user)
+                        roleAssignments.Add(ForUser(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Reader"));
+                    else
+                        roleAssignments.Add(ForSp(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Reader"));
+                }
+                return roleAssignments;
+            });
+
             return this;
         }
         public AzKeyVault WithKeyVaultSecretsAdmins(Output<Dictionary<string,bool>> contributors)
@@ -69,31 +75,31 @@ namespace stargripcorp.dataplatform.infra.azure.Resources
                 {
                     x.TryGetValue(key, out bool user);
                     if (user)
-                        roleAssignments.Add( ForUser(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}"));
+                        roleAssignments.Add( ForUser(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Secrets Officer"));
                     else
-                        roleAssignments.Add( ForSp(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}"));
+                        roleAssignments.Add( ForSp(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Secrets Officer"));
                 }
                 return roleAssignments;
             });
             
             return this;
         }
-        private RoleAssignment ForUser(string objectId,string name)
+        private RoleAssignment ForUser(string objectId,string name,string roleName)
         {
             return new RoleAssignment(name, new()
             {
                 PrincipalId = objectId,
-                RoleDefinitionId = Utils.GetRoleIdByName("Key Vault Secrets Officer").Result,
+                RoleDefinitionId = Utils.GetRoleIdByName(roleName).Result,
                 PrincipalType = "User",
                 Scope = Vault.Id
             }, new CustomResourceOptions { Parent = this });
         }
-        private RoleAssignment ForSp(string objectId, string name)
+        private RoleAssignment ForSp(string objectId, string name, string roleName)
         {
             return new RoleAssignment(name, new()
             {
                 PrincipalId = objectId,
-                RoleDefinitionId = Utils.GetRoleIdByName("Key Vault Secrets Officer").Result,
+                RoleDefinitionId = Utils.GetRoleIdByName(roleName).Result,
                 PrincipalType = "ServicePrincipal",
                 Scope = Vault.Id
             }, new CustomResourceOptions { Parent = this });
