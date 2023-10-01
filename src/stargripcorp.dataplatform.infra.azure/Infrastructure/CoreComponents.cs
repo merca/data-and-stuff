@@ -4,6 +4,8 @@ using stargripcorp.dataplatform.infra.azure.Resources;
 using stargripcorp.dataplatform.infra.utils.Naming;
 using stargripcorp.dataplatform.infra.utils.Stack;
 
+namespace stargripcorp.dataplatform.infra.azure.Infrastructure;
+
 internal class CoreComponents
 {
     private readonly StackConfig _config;
@@ -22,10 +24,10 @@ internal class CoreComponents
         var currentServicePrincipalId = Output.Create(GetClientConfig.InvokeAsync()).Apply(c => c.ObjectId);
 
         var admins = new Dictionary<string, bool>
-        {
-            {"f5d889ea-e64e-467a-9240-f875ff284c04", false}, //deploy-sp
-            {"3a668e53-336b-4d30-94bf-6620cdd036ec", true } //me
-        };
+    {
+        {"f5d889ea-e64e-467a-9240-f875ff284c04", false}, //deploy-sp
+        {"3a668e53-336b-4d30-94bf-6620cdd036ec", true } //me
+    };
 
         var kv = new AzKeyVault($"{shortName}-kv", _naming, rg.ResourceGroupName, _tags)
             .WithKeyVaultSecretsAdmins(Output.Create(admins)).WithSecret("test", "test");

@@ -1,8 +1,9 @@
 ﻿using Pulumi;
 using Pulumi.AzureNative.Authorization;
-using stargripcorp.dataplatform.infra.azure.Resources;
 using stargripcorp.dataplatform.infra.utils.Naming;
 using Azure = Pulumi.AzureNative;
+
+namespace stargripcorp.dataplatform.infra.azure.Resources;
 
 internal class AzResourceGroup : ComponentResource
 {
@@ -10,7 +11,7 @@ internal class AzResourceGroup : ComponentResource
     public Output<string> ResourceGroupName;
     private static Output<GetClientConfigResult> _clientConfig => GetClientConfig.Invoke();
     private readonly NamingConvention _naming;
-    
+
     public AzResourceGroup(string id, NamingConvention naming, Dictionary<string, string> _tags) : base("pkg:azure:resource_group", id)
     {
         _naming = naming;
@@ -44,24 +45,24 @@ internal class AzResourceGroup : ComponentResource
                     Name = "ResourceGroupName",
                     Operator = "In",
                     Values = new()
-                    {
-                        $"/subscriptions/{_clientConfig.Apply(o=>o.SubscriptionId)}/resourceGroups/{ResourceGroup!.Name}"
-                    }
-                },                
+                {
+                    $"/subscriptions/{_clientConfig.Apply(o=>o.SubscriptionId)}/resourceGroups/{ResourceGroup!.Name}"
+                }
+                },
 
             },
             Notifications =
+        {
+            { "Actual_GreaterThan_80_Percent", new Azure.Consumption.Inputs.NotificationArgs
             {
-                { "Actual_GreaterThan_80_Percent", new Azure.Consumption.Inputs.NotificationArgs
-                {
-                    ContactEmails = notificationEmails,                    
-                    Enabled = true,
-                    Locale = "en-us",
-                    Operator = "GreaterThan",
-                    Threshold = 80,
-                    ThresholdType = "Actual",
-                } },
-            },
+                ContactEmails = notificationEmails,
+                Enabled = true,
+                Locale = "en-us",
+                Operator = "GreaterThan",
+                Threshold = 80,
+                ThresholdType = "Actual",
+            } },
+        },
 
         }, new CustomResourceOptions { Parent = this });
         return this;

@@ -2,7 +2,7 @@
 
 namespace stargripcorp.dataplatform.infra.utils.Naming;
 
-public class NamingConvention
+public partial class NamingConvention
 {
     private readonly string owner;
     private readonly string shortName;
@@ -76,25 +76,25 @@ public class NamingConvention
 
     private string GetStorageAccountResourceName(string resourceTypeAbbreviation)
     {
-        var name = $"{owner.Substring(0, Math.Min(owner.Length, 5))}{shortName}{environment}{resourceTypeAbbreviation}";
-        name = Regex.Replace(name, @"[^a-zA-Z0-9]", "");
+        var name = $"{owner[0 .. Math.Min(owner.Length, 5)]}{shortName}{environment}{resourceTypeAbbreviation}";
+        name = NoSpecialCharsRegex().Replace(name, "");
         if (name.Length > 24)
         {
-            var shortNameLength = 24 - $"{nameof(owner).Substring(0, Math.Min(owner.Length, 5))}{environment}{resourceTypeAbbreviation}".Length;
-            name = $"{owner.Substring(0, Math.Min(owner.Length, 5))}{shortName.Substring(0, Math.Min(shortName.Length, shortNameLength))}{environment}{resourceTypeAbbreviation}";
+            var shortNameLength = 24 - $"{nameof(owner)[0 .. Math.Min(owner.Length, 5)]}{environment}{resourceTypeAbbreviation}".Length;
+            name = $"{owner[..Math.Min(owner.Length, 5)]}{shortName[.. Math.Min(shortName.Length, shortNameLength)]}{environment}{resourceTypeAbbreviation}";
         }
         return name;
     }
 
     private string GetKeyVaultResourceName(string resourceTypeAbbreviation)
     {
-        var name = $"{owner.Substring(0, Math.Min(owner.Length, 5))}-{shortName}-{environment}-{resourceTypeAbbreviation}";
-        name = Regex.Replace(name, @"[^a-zA-Z0-9-]", "");
+        var name = $"{owner[..Math.Min(owner.Length, 5)]}-{shortName}-{environment}-{resourceTypeAbbreviation}";
+        name = NoSpecialCharsRegex().Replace(name, "");
         if (name.Length > 24)
         {
-            // 24 is allowed for keyvaults, but using 23 since we add a hyphen
-            var shortNameLength = 23 - $"{nameof(owner).Substring(0, Math.Min(owner.Length, 5))}-{environment}-{resourceTypeAbbreviation}".Length;
-            name = $"{owner.Substring(0, Math.Min(owner.Length, 5))}-{shortName.Substring(0, Math.Min(shortName.Length, shortNameLength))}-{environment}-{resourceTypeAbbreviation}";
+            // 24 is allowed for key vaults, but using 23 since we add a hyphen
+            var shortNameLength = 23 - $"{nameof(owner)[.. Math.Min(owner.Length, 5)]}-{environment}-{resourceTypeAbbreviation}".Length;
+            name = $"{owner[.. Math.Min(owner.Length, 5)]}-{shortName[.. Math.Min(shortName.Length, shortNameLength)]}-{environment}-{resourceTypeAbbreviation}";
         }
         return name;
     }
@@ -104,4 +104,6 @@ public class NamingConvention
         return $"{owner}-{shortName}-{environment}-{resourceTypeAbbreviation}";
     }
 
+    [GeneratedRegex(@"[^a-zA-Z0-9-]")]
+    private static partial Regex NoSpecialCharsRegex();
 }
