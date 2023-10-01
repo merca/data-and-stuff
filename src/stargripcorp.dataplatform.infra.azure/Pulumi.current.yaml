@@ -1,6 +1,5 @@
 config:
   azure-native:location: westeu
-  azure-native:useOidc: "true"
   stargripcorp:environment: dev
   stargripcorp:owner: merca
   stargripcorp:short-name: dataplatform

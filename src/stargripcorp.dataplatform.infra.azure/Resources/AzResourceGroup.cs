@@ -46,7 +46,7 @@ internal class AzResourceGroup : ComponentResource
                             Operator = "In",
                             Values = new string[] 
                             {
-                                $"/subscriptions/{_clientConfig.Apply<string>(o=>o.SubscriptionId)}/resourceGroups/{ResourceGroup!.Name}"
+                                $"/subscriptions/{_clientConfig.Apply(o=>o.SubscriptionId)}/resourceGroups/{ResourceGroup!.Name}"
                             }
                         }
                     }
@@ -56,16 +56,7 @@ internal class AzResourceGroup : ComponentResource
             {
                 { "Actual_GreaterThan_80_Percent", new Azure.Consumption.Inputs.NotificationArgs
                 {
-                    ContactEmails = notificationEmails,
-                    ContactGroups = new[]
-                    {
-                        $"/subscriptions/{_clientConfig.Apply<string>(o=>o.SubscriptionId)}/resourceGroups/{ResourceGroup!.Name}/providers/microsoft.insights/actionGroups/BudgetMonitors",
-                    },
-                    ContactRoles = new[]
-                    {
-                        "Contributor",
-                        "Reader",
-                    },
+                    ContactEmails = notificationEmails,                    
                     Enabled = true,
                     Locale = "en-us",
                     Operator = "GreaterThan",
