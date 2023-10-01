@@ -16,9 +16,9 @@ internal class CoreComponents
     }
     public void Run()
     {
-        var rg = new AzResourceGroup(shortName, _naming).WithBudget(20, ["merca@cetera.desunt.com"]);
+        var rg = new AzResourceGroup($"{shortName}-rg", _naming).WithBudget(20, ["merca@cetera.desunt.com"]);
         var currentServicePrincipalId = Output.Create(GetClientConfig.InvokeAsync()).Apply(c => c.ObjectId);
-        var kv = new AzKeyVault(shortName, _naming, rg.ResourceGroupName)
+        var kv = new AzKeyVault($"{shortName}-kv", _naming, rg.ResourceGroupName)
             .WithSecretsContributor(new List<Output<string>> {
                 currentServicePrincipalId,
             }).WithSecret("test", "test");
