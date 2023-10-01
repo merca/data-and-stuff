@@ -1,0 +1,50 @@
+name: ✅ Deepsource report
+
+permissions:
+    contents: read
+    issues: read
+    checks: write
+    pull-requests: write
+
+# Controls when the action will run.
+on:
+  pull_request:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+jobs:
+    testcoverage:
+        name: runner / deepsource
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                ref: ${{ github.event.pull_request.head.sha }}
+            - uses: actions/setup-dotnet@v3
+              with:
+                  dotnet-version: 8.0.x
+            - name: Run dotnet tests
+              run: |
+                # Run your tests here
+                dotnet test ./src --collect:"XPlat Code Coverage" --logger:"trx;LogFilePrefix=testResults;verbosity=detailed" --results-directory ./test-results
+                mv -v ./test-results/*/*.* ./test-results/
+            - name: Publish Test Results
+              uses: EnricoMi/publish-unit-test-result-action/composite@v2
+              id: test-results
+              if: always()
+              with:
+                files: |
+                    test-results/**/*.trx
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+            - name: display test results
+              run: |
+                echo ${{ steps.test-results.outputs.json }}
+            - name: Report results to DeepSource
+              run: |        
+                # Install deepsource CLI
+                     curl https://deepsource.io/cli | sh
+        
+                # From the root directory, run the report coverage command
+                      ./bin/deepsource report --analyzer test-coverage --key csharp --value-file ./test-results/coverage.cobertura.xml
+              env:
+                DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
