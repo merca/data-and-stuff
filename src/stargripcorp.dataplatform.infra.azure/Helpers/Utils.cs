@@ -6,7 +6,7 @@ namespace stargripcorp.dataplatform.infra.azure.Helpers
 {
     internal class Utils
     {
-        public static async Task<string> GetRoleIdByName(string roleName, string? scope = null)
+        public static async Task<string> GetRoleIdByNameAsync(string roleName)
         {
             var config = await GetClientConfig.InvokeAsync();
             var token = await GetClientToken.InvokeAsync();
@@ -25,6 +25,8 @@ namespace stargripcorp.dataplatform.infra.azure.Helpers
             return definition!.value[0].id;
         }
     }
+#pragma warning disable IDE1006 // Naming Styles
     public record RoleDefinition(List<RoleDefinitionValue> value);
     public record RoleDefinitionValue(string id, string type, string name);
+#pragma warning restore IDE1006 // Naming Styles
 }

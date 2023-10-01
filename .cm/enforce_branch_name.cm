@@ -20,7 +20,7 @@ automations:
       - action: close@v1
 
 has:
-  requiredBranchPrefix: {{ branch.name | includes(regex=r/^(feature|stable|fix)/) }}
+  requiredBranchPrefix: {{ branch.name | includes(regex=r/^(feature|stable|fix|build)/) }}
   requiredBranchKeyword: {{ branch.name | includes(regex=r/abc+-\d+/) }}
 
 ignoreList: {{ branch.name | match(regex=r/^(current|next)/) }}

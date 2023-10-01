@@ -7,15 +7,11 @@ public class NamingConventionTests
 {
     private readonly NamingConvention azNamingConvention;
     private readonly NamingConvention azLongNamingConvention;
-    private readonly NamingConvention? awsNamingConvention;
-    private readonly NamingConvention? gcpNamingConvention;
 
     public NamingConventionTests()
     {
         azNamingConvention = new NamingConvention("myco", "myapp", "dev", "azure");
         azLongNamingConvention = new NamingConvention("myco", "myappwithaverylongname", "dev", "azure");
-        //awsNamingConvention = new NamingConvention("myco", "myapp", "dev", "aws");
-        //gcpNamingConvention = new NamingConvention("myco", "myapp", "dev", "gcp");
     }
     [Fact]
     public void GetResourceName_StorageAccount_ReturnsCorrectName()
@@ -68,7 +64,6 @@ public class NamingConventionTests
     [Fact]
     public void GetResourceName_StorageAccount_LongShortName_ReturnsCorrectName()
     {
-
         // Act
         var resourceName = azLongNamingConvention.GetResourceName("azure-native:storage:StorageAccount");
 
@@ -80,7 +75,6 @@ public class NamingConventionTests
     [Fact]
     public void GetResourceName_KeyVault_LongShortName_ReturnsCorrectName()
     {
-
         // Act
         var resourceName = azLongNamingConvention.GetResourceName("azure-native:keyvault:Vault");
 
@@ -90,27 +84,27 @@ public class NamingConventionTests
     }
 
     [Fact]
-    public void GetRecourceId_StorageAccount_ReturnsCorrectId()
+    public void GetRecourseId_StorageAccount_ReturnsCorrectId()
     {
         // Arrange
         var resourceType = "azure-native:storage:StorageAccount";
 
         // Act
-        var resourceIdx = azNamingConvention.GetResourceId(resourceType);
+        var resourceIdx = azNamingConvention.GenerateResourceId(resourceType);
 
         // Assert
         resourceIdx.Should().Be("myco-myapp-dev-sa");
     }
+    [Fact]
+    public void Constructor_WithInvalidCloudProvider_ThrowsArgumentException()
+    {
+        // Arrange
+        var owner = "myco";
+        var shortName = "myapp";
+        var environment = "dev";
+        var cloudProvider = "invalid";
 
-    //[Fact]
-    //public void GetResourceName_AwsBucket_UsesCorrectNamingConvention()
-    //{
-    //    // Arrange
-
-    //    // Act
-    //    var resourceName = awsNamingConvention.GetResourceName("aws:s3:Bucket");
-
-    //    // Assert
-    //    resourceName.Should().Be("myco-myapp-dev-s3", because: "the resource name should follow the correct naming convention");
-    //}
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => new NamingConvention(owner, shortName, environment, cloudProvider));
+    }
 }

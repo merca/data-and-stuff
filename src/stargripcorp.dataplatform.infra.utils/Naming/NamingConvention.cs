@@ -1,107 +1,81 @@
-﻿using System.Text.RegularExpressions;
-
-namespace stargripcorp.dataplatform.infra.utils.Naming;
+﻿namespace stargripcorp.dataplatform.infra.utils.Naming;
 
 public class NamingConvention
 {
     private readonly string owner;
     private readonly string shortName;
     private readonly string environment;
-
+    private readonly Dictionary<string, Func<string, string>> resourceTypeGenerators;
     private readonly ResourceTypeAbbreviations resourceTypeAbbreviations;
 
     public NamingConvention(string owner, string shortName, string environment, string cloudProvider)
     {
-        if (owner.Length > 5)
-        {
-            throw new ArgumentException("Owner name must be 5 characters or less.");
-        }
-
-        if (!new[] { "dev", "test", "stage", "prod" }.Contains(environment))
-        {
-            throw new ArgumentException("Environment must be one of: dev, test, stage, prod.");
-        }
-
         this.owner = owner;
         this.shortName = shortName;
         this.environment = environment;
+        resourceTypeAbbreviations = cloudProvider == "azure" ?
+            new AzureResourceTypeAbbreviations() : 
+            throw new ArgumentException(cloudProvider, $"No abbreviations for {cloudProvider}");
 
-        switch (cloudProvider)
+        resourceTypeGenerators = new Dictionary<string, Func<string, string>>
         {
-            case "azure":
-                resourceTypeAbbreviations = new AzureResourceTypeAbbreviations();
-                break;
-            //case "aws":
-            //    resourceTypeAbbreviations = new AwsResourceTypeAbbreviations();
-            //    break;
-            //case "gcp":
-            //    resourceTypeAbbreviations = new GcpeResourceTypeAbbreviations();
-            //    break;
-            default:
-                throw new ArgumentException($"Unknown cloud provider: {cloudProvider}");
-        }
-    }
-
-    public string GetResourceId(string resourceType)
-    {
-        if (!resourceTypeAbbreviations.Contains(resourceType))
-        {
-            throw new ArgumentException($"Unknown resource type: {resourceType}");
-        }
-
-        var resourceTypeAbbreviation = resourceTypeAbbreviations.GetAbbreviation(resourceType);
-
-        return $"{owner}-{shortName}-{environment}-{resourceTypeAbbreviation}";
+            {"azure-native:storage:StorageAccount", GenerateStorageAccountResourceName },
+            { "azure-native:keyvault:Vault", GenerateKeyVaultResourceName },
+            {"azure-native:resources:ResourceGroup",GenerateResourceName},
+            {"azure-native:authorization:RoleAssignment",GenerateResourceName},
+            {"azure-native:resources:Budget",GenerateResourceName},
+            {"azure-native:keyvault:Secret",GenerateResourceName},
+        };
     }
 
     public string GetResourceName(string resourceType)
     {
-        if (!resourceTypeAbbreviations.Contains(resourceType))
+        if (!resourceTypeGenerators.TryGetValue(resourceType, out Func<string, string>? value))
+        {
+            throw new ArgumentException($"Unknown resource type: {resourceType}");
+        }
+        var generator = value;
+        return generator(resourceType);
+    }
+
+    public string GenerateResourceId(string resourceType)
+    {
+        if (!resourceTypeGenerators.ContainsKey(resourceType))
         {
             throw new ArgumentException($"Unknown resource type: {resourceType}");
         }
 
         var resourceTypeAbbreviation = resourceTypeAbbreviations.GetAbbreviation(resourceType);
-
-        switch (resourceType)
-        {
-            case "azure-native:storage:StorageAccount":
-                return GetStorageAccountResourceName(resourceTypeAbbreviation);
-            case "azure-native:keyvault:Vault":
-                return GetKeyVaultResourceName(resourceTypeAbbreviation);
-            default:
-                return GetDefaultResourceName(resourceTypeAbbreviation);
-        }
+        var resourceName = $"{owner}-{shortName}-{environment}-{resourceTypeAbbreviation}";
+        return $"{resourceName}";
     }
-
-    private string GetStorageAccountResourceName(string resourceTypeAbbreviation)
+    public string GenerateResourceName(string resourceType)
     {
-        var name = $"{owner.Substring(0, Math.Min(owner.Length, 5))}{shortName}{environment}{resourceTypeAbbreviation}";
-        name = Regex.Replace(name, @"[^a-zA-Z0-9]", "");
-        if (name.Length > 24)
+        if (!resourceTypeGenerators.ContainsKey(resourceType))
         {
-            var shortNameLength = 24 - $"{nameof(owner).Substring(0, Math.Min(owner.Length, 5))}{environment}{resourceTypeAbbreviation}".Length;
-            name = $"{owner.Substring(0, Math.Min(owner.Length, 5))}{shortName.Substring(0, Math.Min(shortName.Length, shortNameLength))}{environment}{resourceTypeAbbreviation}";
+            throw new ArgumentException($"Unknown resource type: {resourceType}");
         }
-        return name;
+
+        var resourceTypeAbbreviation = resourceTypeAbbreviations.GetAbbreviation(resourceType);
+        var resourceName = $"{owner}-{shortName}-{environment}-{resourceTypeAbbreviation}";
+        return $"{resourceName}";
     }
 
-    private string GetKeyVaultResourceName(string resourceTypeAbbreviation)
+    private string GenerateStorageAccountResourceName(string resourceType)
     {
-        var name = $"{owner.Substring(0, Math.Min(owner.Length, 5))}-{shortName}-{environment}-{resourceTypeAbbreviation}";
-        name = Regex.Replace(name, @"[^a-zA-Z0-9-]", "");
-        if (name.Length > 24)
-        {
-            // 24 is allowed for keyvaults, but using 23 since we add a hyphen
-            var shortNameLength = 23 - $"{nameof(owner).Substring(0, Math.Min(owner.Length, 5))}-{environment}-{resourceTypeAbbreviation}".Length;
-            name = $"{owner.Substring(0, Math.Min(owner.Length, 5))}-{shortName.Substring(0, Math.Min(shortName.Length, shortNameLength))}-{environment}-{resourceTypeAbbreviation}";
-        }
-        return name;
+        var resourceTypeAbbreviation = resourceTypeAbbreviations.GetAbbreviation(resourceType);
+        var shortNameLength = 17 - resourceTypeAbbreviation.Length;
+        var name = $"{owner[..Math.Min(owner.Length, 5)]}{shortName}{environment}{resourceTypeAbbreviation}";
+        name = StringExpressions.NoSpecialCharactersLowerCase().Replace(name, "");
+        return name.Length > 24 ? $"{owner[..Math.Min(owner.Length, 5)]}{shortName[..shortNameLength]}{environment}{resourceTypeAbbreviation}" : name;
     }
 
-    private string GetDefaultResourceName(string resourceTypeAbbreviation)
+    private string GenerateKeyVaultResourceName(string resourceType)
     {
-        return $"{owner}-{shortName}-{environment}-{resourceTypeAbbreviation}";
+        var resourceTypeAbbreviation = resourceTypeAbbreviations.GetAbbreviation(resourceType);
+        var shortNameLength = Math.Min(12, shortName.Length);
+        var name = $"{owner}-{shortName[..shortNameLength]}-{environment}-{resourceTypeAbbreviation}";
+        name = StringExpressions.AllowDashes().Replace(name, "");
+        return name.Length > 24 ? $"{owner[..Math.Min(owner.Length, 5)]}-{shortName[..shortNameLength]}-{environment}-{resourceTypeAbbreviation}" : name;
     }
-
 }
