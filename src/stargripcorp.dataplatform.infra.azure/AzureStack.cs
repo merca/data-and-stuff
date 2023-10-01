@@ -39,7 +39,7 @@ internal class AzureStack : Stack
                     environment: config.Environment,
                     cloudProvider: CloudProvider
                 ), tags.Std_Tags).Run();
-        new DataPlatform(config,
+        new DataPlatform(
             new NamingConvention(
                     owner: config.Owner,
                     shortName: "data",
