@@ -32,19 +32,19 @@ internal class AzureStack : Stack
             {"is_automated", "true" }
         });
 
-        new CoreComponents(config,
+        new CoreComponents(
             new NamingConvention(
                     owner: config.Owner,
                     shortName: "core",
                     environment: config.Environment,
                     cloudProvider: CloudProvider
-                ), tags: tags.Std_Tags).Run();
+                ), tags.Std_Tags).Run();
         new DataPlatform(config,
             new NamingConvention(
                     owner: config.Owner,
                     shortName: "data",
                     environment: config.Environment,
                     cloudProvider: CloudProvider
-                ), tags: tags.Std_Tags).Run();
+                ), tags.Std_Tags).Run();
     }
 }

@@ -90,9 +90,21 @@ public class NamingConventionTests
         var resourceType = "azure-native:storage:StorageAccount";
 
         // Act
-        var resourceIdx = azNamingConvention.GetResourceId(resourceType);
+        var resourceIdx = azNamingConvention.GenerateResourceId(resourceType);
 
         // Assert
         resourceIdx.Should().Be("myco-myapp-dev-sa");
+    }
+    [Fact]
+    public void Constructor_WithInvalidCloudProvider_ThrowsArgumentException()
+    {
+        // Arrange
+        var owner = "myco";
+        var shortName = "myapp";
+        var environment = "dev";
+        var cloudProvider = "invalid";
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => new NamingConvention(owner, shortName, environment, cloudProvider));
     }
 }

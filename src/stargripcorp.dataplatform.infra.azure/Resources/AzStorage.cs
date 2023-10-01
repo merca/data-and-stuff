@@ -10,7 +10,7 @@ internal class AzStorage(string id, NamingConvention naming, Output<string> reso
 
     public void GenerateStorageAccount(bool isHnsEnabled)
     {
-        _ = new Azure.Storage.StorageAccount(_naming.GetResourceId("azure-native:storage:StorageAccount"), new()
+        _ = new Azure.Storage.StorageAccount(_naming.GenerateResourceId("azure-native:storage:StorageAccount"), new()
         {
             AccountName = _naming.GetResourceName("azure-native:storage:StorageAccount"),
             ResourceGroupName = resourceGroupName,

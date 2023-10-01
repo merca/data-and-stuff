@@ -2,7 +2,7 @@
 
 internal class ResourceTypeAbbreviations
 {
-    private readonly Dictionary<string, string> abbreviations = new Dictionary<string, string>();
+    private readonly Dictionary<string, string> abbreviations = new();
     public void Add(string resourceType, string abbreviation)
     {
         abbreviations[resourceType] = abbreviation;

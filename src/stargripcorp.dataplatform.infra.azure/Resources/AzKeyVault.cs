@@ -16,7 +16,7 @@ internal class AzKeyVault : ComponentResource
     {
         _naming = naming;
         _resourceGroupName = resourceGroupName;
-        Vault = new Azure.KeyVault.Vault(_naming.GetResourceId("azure-native:keyvault:Vault"), new()
+        Vault = new Azure.KeyVault.Vault(_naming.GenerateResourceId("azure-native:keyvault:Vault"), new()
         {
             VaultName = _naming.GetResourceName("azure-native:keyvault:Vault"),
             ResourceGroupName = resourceGroupName,
@@ -35,7 +35,7 @@ internal class AzKeyVault : ComponentResource
     }
     public AzKeyVault WithSecret(string secretName, string secretValue)
     {
-        _ = new Azure.KeyVault.Secret(_naming.GetResourceId("azure-native:keyvault:Secret"), new()
+        _ = new Azure.KeyVault.Secret(_naming.GenerateResourceId("azure-native:keyvault:Secret"), new()
         {
             VaultName = Vault.Name,
             ResourceGroupName = _resourceGroupName,
@@ -58,11 +58,11 @@ internal class AzKeyVault : ComponentResource
                 x.TryGetValue(key, out bool user);
                 if (user)
                 {
-                    roleAssignments.Add(ForUser(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Reader"));
+                    roleAssignments.Add(ForUser(key, $"{_naming.GenerateResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Reader"));
                 }
                 else
                 {
-                    roleAssignments.Add(ForSp(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Reader"));
+                    roleAssignments.Add(ForSp(key, $"{_naming.GenerateResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Reader"));
                 }
             }
             return roleAssignments;
@@ -79,9 +79,9 @@ internal class AzKeyVault : ComponentResource
             {
                 x.TryGetValue(key, out bool user);
                 if (user)
-                    roleAssignments.Add( ForUser(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Secrets Officer"));
+                    roleAssignments.Add( ForUser(key, $"{_naming.GenerateResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Secrets Officer"));
                 else
-                    roleAssignments.Add( ForSp(key, $"{_naming.GetResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Secrets Officer"));
+                    roleAssignments.Add( ForSp(key, $"{_naming.GenerateResourceId("azure-native:authorization:RoleAssignment")}-{key}", "Key Vault Secrets Officer"));
             }
             return roleAssignments;
         });

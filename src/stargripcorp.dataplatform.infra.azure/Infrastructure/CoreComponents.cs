@@ -18,7 +18,7 @@ internal class CoreComponents(NamingConvention naming, Dictionary<string, string
         {"3a668e53-336b-4d30-94bf-6620cdd036ec", true } //me
     };
 
-        _ = new AzKeyVault($"{shortName}-kv", naming, rg.ResourceGroupName, _tags)
+        _ = new AzKeyVault($"{shortName}-kv", naming, rg.ResourceGroupName, tags)
             .WithKeyVaultSecretsAdmins(Output.Create(admins)).WithSecret("test", "test");
     }
 }

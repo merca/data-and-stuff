@@ -15,7 +15,7 @@ internal class AzResourceGroup : ComponentResource
     public AzResourceGroup(string id, NamingConvention naming, Dictionary<string, string> _tags) : base("pkg:azure:resource_group", id)
     {
         _naming = naming;
-        ResourceGroup = new Azure.Resources.ResourceGroup(_naming.GetResourceId("azure-native:resources:ResourceGroup"), new()
+        ResourceGroup = new Azure.Resources.ResourceGroup(_naming.GenerateResourceId("azure-native:resources:ResourceGroup"), new()
         {
             ResourceGroupName = _naming.GetResourceName("azure-native:resources:ResourceGroup"),
             Tags = _tags
@@ -26,7 +26,7 @@ internal class AzResourceGroup : ComponentResource
     {
         Output<string> subscriptionId = ClientConfig.Apply(o => o.SubscriptionId);
 
-        _ = new Azure.Consumption.Budget(_naming.GetResourceId("azure-native:resources:Budget"), new()
+        _ = new Azure.Consumption.Budget(_naming.GenerateResourceId("azure-native:resources:Budget"), new()
         {
             Amount = budgetAmount,
             Category = "Cost",
