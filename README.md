@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/merca/data-and-stuff" rel="noopener">
- <img width=200px height=200px src="https://i.imgur.com/6wj0hh6.jpg" alt="Project logo"></a>
+ <img width=200px height=200px src="media/merca.png" alt="Project logo"></a>
 </p>
 
 <h3 align="center">The Chronicles of a Data Potato</h3>
@@ -34,7 +34,7 @@
 
 ## 🧐 About
 
-In this repository, you'll find the relics of my expeditions into the uncharted territories of data engineering, architecture, analysis, and science. The `feature/add-timestamps-handeling` branch is but one of the many scrolls of knowledge housed within.
+In this repository, you'll find the relics of my expeditions into the uncharted territories of data engineering, architecture, analysis, and science.
 
 ## 🏁 Getting Started
 
@@ -42,11 +42,11 @@ To embark upon this quest, ensure your steed (your machine) is equipped with the
 
 ### Prerequisites
 
-```sh
-# Install necessary tools
+Infrastructure is written with Pulumi, so you'll need to install it.
 
-brew install python
-brew install pulumi
+```powershell
+# Install necessary tools
+choco install pulumi
 ```
 
 ### Installing
@@ -64,7 +64,7 @@ Invoke the spells to summon the testing spirits.
 
 ```sh
 # Run the tests
-pytest
+dotnet test
 ```
 
 ## 🎈 Usage
