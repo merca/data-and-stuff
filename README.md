@@ -3,6 +3,7 @@
 <p align="center">
   <a href="https://github.com/merca/data-and-stuff" rel="noopener">
  <img width=200px height=200px src="media/merca.png" alt="Project logo"></a>
+
 </p>
 
 <h3 align="center">The Chronicles of a Data Potato</h3>
@@ -34,13 +35,16 @@
 
 ## 🧐 About
 
+
 In this repository, you'll find the relics of my expeditions into the uncharted territories of data engineering, architecture, analysis, and science.
+
 
 ## 🏁 Getting Started
 
 To embark upon this quest, ensure your steed (your machine) is equipped with the necessary armaments.
 
 ### Prerequisites
+
 
 Infrastructure is written with Pulumi, so you'll need to install it.
 
@@ -64,7 +68,9 @@ Invoke the spells to summon the testing spirits.
 
 ```sh
 # Run the tests
+
 dotnet test
+
 ```
 
 ## 🎈 Usage
