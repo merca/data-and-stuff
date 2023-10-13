@@ -13,7 +13,7 @@
 ![GitHub issues](https://img.shields.io/github/issues/merca/data-and-stuff)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/merca/data-and-stuff)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/64f70747a98f4a36bc5cbe5ff7fde4ad)](https://app.codacy.com/gh/merca/data-and-stuff/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-
+[![codecov](https://codecov.io/gh/merca/data-and-stuff/graph/badge.svg?token=Jncw0XmUJd)](https://codecov.io/gh/merca/data-and-stuff)
 </div>
 
 <p align="center"> A saga of venturing through the trenches of timestamps, and grappling with the tendrils of time in data engineering.
