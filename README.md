@@ -12,6 +12,7 @@
 
 ![GitHub issues](https://img.shields.io/github/issues/merca/data-and-stuff)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/merca/data-and-stuff)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/64f70747a98f4a36bc5cbe5ff7fde4ad)](https://app.codacy.com/gh/merca/data-and-stuff/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 </div>
 
@@ -35,16 +36,13 @@
 
 ## 🧐 About
 
-
 In this repository, you'll find the relics of my expeditions into the uncharted territories of data engineering, architecture, analysis, and science.
-
 
 ## 🏁 Getting Started
 
 To embark upon this quest, ensure your steed (your machine) is equipped with the necessary armaments.
 
 ### Prerequisites
-
 
 Infrastructure is written with Pulumi, so you'll need to install it.
 
