@@ -32,7 +32,7 @@ automations:
     run:
       - action: add-reviewers@v1
         args:
-          reviewers: [my_organization/mentors]
+          reviewers: [merca/mentors]
       - action: add-label@v1
         args:
           label: 'new-contributor'
