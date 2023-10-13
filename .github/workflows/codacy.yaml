@@ -14,8 +14,24 @@ jobs:
         checks: write
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/setup-dotnet@v3
+      with:
+          dotnet-version: 8.0.x
+    - name: Run dotnet tests
+      run: |
+        # Run your tests here
+        dotnet test ./src --collect:"XPlat Code Coverage" --logger:"trx;LogFilePrefix=testResults;verbosity=detailed" --results-directory ./test-results
+        mv -v ./test-results/*/*.* ./test-results/
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action/composite@v2
+      id: test-results
+      if: always()
+      with:
+        files: |
+            test-results/**/*.trx
+        github_token: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload coverage reports to Codacy
       run: |
-        bash <(curl -Ls https://coverage.codacy.com/get.sh)
+        bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r ./test-results/coverage.cobertura.xml
       env:
         CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}  
