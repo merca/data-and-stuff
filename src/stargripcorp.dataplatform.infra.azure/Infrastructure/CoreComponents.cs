@@ -6,10 +6,10 @@ namespace stargripcorp.dataplatform.infra.azure.Infrastructure;
 
 internal class CoreComponents(NamingConvention naming, Dictionary<string, string> tags)
 {
-    private readonly string shortName = "core";
-
     public void Run()
     {
+        var shortName = "core";
+
         var rg = new AzResourceGroup($"{shortName}-rg", naming, tags).WithBudget(20, ["merca@cetera.desunt.com"]);
 
         var admins = new Dictionary<string, bool>

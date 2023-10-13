@@ -40,14 +40,7 @@ public class NamingConvention
 
     public string GenerateResourceId(string resourceType)
     {
-        if (!resourceTypeGenerators.ContainsKey(resourceType))
-        {
-            throw new ArgumentException($"Unknown resource type: {resourceType}");
-        }
-
-        var resourceTypeAbbreviation = resourceTypeAbbreviations.GetAbbreviation(resourceType);
-        var resourceName = $"{owner}-{shortName}-{environment}-{resourceTypeAbbreviation}";
-        return $"{resourceName}";
+        return GenerateResourceName(resourceType);
     }
     public string GenerateResourceName(string resourceType)
     {

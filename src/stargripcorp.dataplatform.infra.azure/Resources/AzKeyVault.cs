@@ -64,16 +64,16 @@ namespace stargripcorp.dataplatform.infra.azure.Resources
         }
         public AzKeyVault WithKeyVaultSecretsAdmins(Output<Dictionary<string, bool>> contributors)
         {
-            object value = contributors.Apply(x =>
+            _ = contributors.Apply(x =>
             {
                 List<RoleAssignment> roleAssignments = [];
                 foreach (var key in x.Keys)
                 {
                     x.TryGetValue(key, out bool user);
-                    if (user)
-                        roleAssignments.Add(ForUser(key, $"{_naming.GenerateResourceId("azure-native:authorization:RoleAssignment")}-{key}"));
-                    else
-                        roleAssignments.Add(ForSp(key, $"{_naming.GenerateResourceId("azure-native:authorization:RoleAssignment")}-{key}"));
+                    if (user) { roleAssignments.Add(ForUser(key, $"{_naming.GenerateResourceId("azure-native:authorization:RoleAssignment")}-{key}")); }
+
+                    else { roleAssignments.Add(ForSp(key, $"{_naming.GenerateResourceId("azure-native:authorization:RoleAssignment")}-{key}")); }
+                        
                 }
                 return roleAssignments;
             });
