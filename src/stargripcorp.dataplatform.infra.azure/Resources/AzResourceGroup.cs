@@ -34,8 +34,8 @@ internal class AzResourceGroup : ComponentResource
             Scope = Output.Format($"/subscriptions/{subscriptionId}"),
             TimePeriod = new Azure.Consumption.Inputs.BudgetTimePeriodArgs
             {
-                StartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0, DateTimeKind.Utc).ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                EndDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddYears(1).ToString("yyyy-MM-ddTHH:mm:ssZ")
+                StartDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc).ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                EndDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc).AddYears(1).ToString("yyyy-MM-ddTHH:mm:ssZ")
             },
             BudgetName = _naming.GetResourceName("azure-native:resources:Budget"),
             Filter = new Azure.Consumption.Inputs.BudgetFilterArgs
@@ -45,11 +45,10 @@ internal class AzResourceGroup : ComponentResource
                     Name = "ResourceGroupName",
                     Operator = "In",
                     Values = new()
-                {
-                    $"/subscriptions/{ClientConfig.Apply(o=>o.SubscriptionId)}/resourceGroups/{ResourceGroup!.Name}"
-                }
+                    {
+                        $"/subscriptions/{ClientConfig.Apply(o=>o.SubscriptionId)}/resourceGroups/{ResourceGroup!.Name}"
+                    }
                 },
-
             },
             Notifications =
             {

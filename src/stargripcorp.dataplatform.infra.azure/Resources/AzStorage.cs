@@ -6,13 +6,12 @@ namespace stargripcorp.dataplatform.infra.azure.Resources;
 
 internal class AzStorage(string id, NamingConvention naming, Output<string> resourceGroupName) : ComponentResource("pkg:azure:storage", id)
 {
-    private readonly NamingConvention _naming = naming;
 
     public void GenerateStorageAccount(bool isHnsEnabled)
     {
-        _ = new Azure.Storage.StorageAccount(_naming.GenerateResourceId("azure-native:storage:StorageAccount"), new()
+        _ = new Azure.Storage.StorageAccount(naming.GenerateResourceId("azure-native:storage:StorageAccount"), new()
         {
-            AccountName = _naming.GetResourceName("azure-native:storage:StorageAccount"),
+            AccountName = naming.GetResourceName("azure-native:storage:StorageAccount"),
             ResourceGroupName = resourceGroupName,
             Sku = new Azure.Storage.Inputs.SkuArgs
             {
