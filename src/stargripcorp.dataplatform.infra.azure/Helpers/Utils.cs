@@ -19,7 +19,7 @@ internal static class Utils
         var response = await httpClient.GetAsync($"https://management.azure.com/subscriptions/{config.SubscriptionId}/providers/Microsoft.Authorization/roleDefinitions?api-version=2018-01-01-preview&$filter=roleName%20eq%20'{roleName}'");
         if (!response.IsSuccessStatusCode)
         {
-            throw new ApiResponseExceptions($"Request failed with {response.StatusCode}");
+            throw new ApiResponseException($"Request failed with {response.StatusCode}");
         }
         var body = await response.Content.ReadAsStringAsync();
         var definition = JsonSerializer.Deserialize<RoleDefinition>(body);
@@ -30,4 +30,3 @@ internal static class Utils
 public record RoleDefinition(List<RoleDefinitionValue> value);
 public record RoleDefinitionValue(string id, string type, string name);
 #pragma warning restore IDE1006 // Naming Styles
-
